@@ -18,8 +18,8 @@ import javax.persistence.criteria.Root;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Customer_;
 import net.dragberry.expman.domain.Role;
+import net.dragberry.expman.domain.Role_;
 import net.dragberry.expman.query.CustomerQuery;
-import net.dragberry.expman.query.sort.SortOrder;
 import net.dragberry.expman.result.ResultList;
 
 @Stateless
@@ -39,21 +39,18 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 		Root<Customer> customerRoot = cq.from(Customer.class);
 		Root<Customer> countRoot = cqCount.from(Customer.class);
 		
-		Join<Customer, Role> joinCustomerRole = customerRoot.join(Customer_.roles, JoinType.LEFT);
-        Join<Customer, Role> joinCustomerRoleCount = countRoot.join(Customer_.roles, JoinType.LEFT);
+		Join<Customer, Role> joinCustomerRole = customerRoot.join(Customer_.roles, JoinType.INNER);
+        Join<Customer, Role> joinCustomerRoleCount = countRoot.join(Customer_.roles, JoinType.INNER);
         
 		
 		if (customerQuery != null) {
-			Predicate where = getWhereClause(customerRoot, cb, customerQuery, joinCustomerRoleCount);
+			Predicate where = getWhereClause(customerRoot, cb, customerQuery, joinCustomerRole);
 			Predicate whereCount = getWhereClause(countRoot, cb, customerQuery, joinCustomerRoleCount);
 			addWhereClause(cq, where);
 			addWhereClause(cqCount, whereCount);
 		}
 		
 		cqCount.select(cb.count(countRoot));
-		
-		customerQuery.addSortItem(Customer_.enabled.getName(), SortOrder.DESCENDING, Customer.class, 1);
-		
 		
 		Map<Class<?>, From<?, ?>>  sortMap = new HashMap<Class<?>, From<?,?>>();
 		sortMap.put(Customer.class, customerRoot);
@@ -78,7 +75,11 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 		Predicate where = null;
 		where = addAndLikeExpression(customerQuery.getCustomerName(), Customer_.customerName, where, cb, root);
 		where = addAndEqualsExpression(customerQuery.getEnabled(), Customer_.enabled, where, cb, root);
-//		In<Role> roles = cb.in(joinCustomerRole.get())
+		In<Long> roles = cb.in(joinCustomerRole.get(Role_.roleKey));
+		for (Role role : customerQuery.getRoles()) {
+			roles.value(role.getRoleKey());
+		}
+		where = andExpression(where, roles, cb);
 		return where;
 	}
 

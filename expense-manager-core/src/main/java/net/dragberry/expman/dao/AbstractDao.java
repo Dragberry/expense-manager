@@ -27,7 +27,7 @@ public class AbstractDao {
 	@PersistenceContext(unitName = "expensemanager")
     private EntityManager entityManager;
 
-	public EntityManager getEntityManager() {
+	protected EntityManager getEntityManager() {
 		return entityManager;
 	}
 	
@@ -81,7 +81,7 @@ public class AbstractDao {
 	 * @param str
 	 * @return
 	 */
-	public static String wrap(String str) {
+	protected String wrap(String str) {
 		return new StringBuilder(PERCENT_QUOTE).append(str).append(PERCENT_QUOTE).toString();
 	}
 	
@@ -104,7 +104,7 @@ public class AbstractDao {
 	 * @param cb
 	 * @param sortMap
 	 */
-	protected static List<Order> getOrders(Set<SortItem> sortList, Map<Class<?>, From<?, ?>> sortMap, CriteriaBuilder cb) {
+	protected List<Order> getOrders(Set<SortItem> sortList, Map<Class<?>, From<?, ?>> sortMap, CriteriaBuilder cb) {
 		List<Order> orders = new ArrayList<Order>();
 		for (SortItem sortItem : sortList) {
 			switch (sortItem.getDirection()) {
@@ -130,6 +130,23 @@ public class AbstractDao {
 	        query.setFirstResult((pageableQuery.getPageNumber() - 1) * pageableQuery.getPageSize());
 	        query.setMaxResults(pageableQuery.getPageSize());
 		}
+	}
+	
+	/**
+	 * Add predicate2 to predicate1 with 'AND' operator. Null-safe operation.
+	 * 
+	 * @param predicate1
+	 * @param predicate2
+	 * @param cb
+	 * @return
+	 */
+	protected <T> Predicate andExpression(Predicate predicate1, Predicate predicate2, CriteriaBuilder cb) {
+		if (predicate1 != null) {
+			predicate1 = cb.and(predicate1, predicate2);
+	    } else {
+	    	predicate1 = predicate2;
+	    }
+		return predicate1;
 	}
 	
 }

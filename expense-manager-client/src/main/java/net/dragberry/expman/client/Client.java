@@ -10,7 +10,6 @@ import javax.naming.NamingException;
 
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.domain.Customer;
-import net.dragberry.expman.domain.Customer_;
 import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
 import net.dragberry.expman.query.sort.SortOrder;
@@ -40,17 +39,18 @@ public class Client {
 		customer.setEnabled(true);
 		
 		Set<Role> roles = new HashSet<Role>();
-		Role role = new Role();
-		role.setRoleName("added");
-		role.setRoleKey(1L);
+		Role role = cs.findRoleByName("admin");
+		
 		roles.add(role);
+		
 		customer = cs.createCustomer(customer);
 		
 		CustomerQuery query = new CustomerQuery();
-		query.setCustomerName("ad");
+		query.setRoles(roles);
+//		query.setCustomerName("ad");
 		query.setEnabled(true);
-		query.setPageNumber(2);
-		query.setPageSize(2);
+		query.setPageNumber(-1);
+		query.setPageSize(-1);
 		query.addSortItem("enabled", SortOrder.DESCENDING, Customer.class, 1);
 		
 		ResultList<Customer> list = cs.fetchCustomerList(query);
