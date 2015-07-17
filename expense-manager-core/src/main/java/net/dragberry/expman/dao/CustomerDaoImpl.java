@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Customer_;
 import net.dragberry.expman.query.CustomerQuery;
+import net.dragberry.expman.result.ResultList;
 
 @Stateless
 public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
@@ -21,7 +22,7 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 	}
 
 	@Override
-	public List<Customer> findCustomers(CustomerQuery customerQuery) {
+	public ResultList<Customer> findCustomers(CustomerQuery customerQuery) {
 
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
@@ -32,7 +33,10 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 			where = addAndEqualsExpression(customerQuery.getEnabled(), Customer_.enabled, where, cb, customerRoot);
 			addWhereClause(cq, where);
 		}
-		return getEntityManager().createQuery(cq).getResultList();
+		List<Customer> list = getEntityManager().createQuery(cq).getResultList();
+		ResultList<Customer> resultList = new ResultList<Customer>();
+		resultList.setList(list);
+		return resultList;
 	}
 
 	@Override

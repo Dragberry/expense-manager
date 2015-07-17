@@ -13,6 +13,7 @@ import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
+import net.dragberry.expman.result.ResultList;
 
 public class Client {
 
@@ -48,7 +49,7 @@ public class Client {
 		query.setCustomerName("ad");
 		query.setEnabled(true);
 		
-		List<Customer> list = cs.fetchCustomerList(query);
+		ResultList<Customer> list = cs.fetchCustomerList(query);
 		
 		Customer cust = cs.findCustomerById(3l);
 		System.out.println();
