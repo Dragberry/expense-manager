@@ -33,3 +33,14 @@ CREATE TABLE customer_role (
 
 INSERT INTO customer_role (customer_key, role_key) VALUES (1, 1);
 INSERT INTO customer_role (customer_key, role_key) VALUES (2, 2);
+
+CREATE TABLE interchange (
+	interchange_key BIGINT AUTO_INCREMENT NOT NULL,
+	amount NUMERIC(19,2),
+	currency VARCHAR(3),
+	description VARCHAR(255),
+	type VARCHAR(1),
+	customer_key BIGINT NOT NULL,
+	PRIMARY KEY (interchange_key),
+	CONSTRAINT FK_INTERCHANGE_CUSTOMER FOREIGN KEY (customer_key) REFERENCES customer (customer_key)
+) ENGINE=INNODB;
