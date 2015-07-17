@@ -7,14 +7,19 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Customer_;
+import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
+import net.dragberry.expman.query.sort.SortOrder;
 import net.dragberry.expman.result.ResultList;
 
 @Stateless
@@ -34,12 +39,21 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 		Root<Customer> customerRoot = cq.from(Customer.class);
 		Root<Customer> countRoot = cqCount.from(Customer.class);
 		
+		Join<Customer, Role> joinCustomerRole = customerRoot.join(Customer_.roles, JoinType.LEFT);
+        Join<Customer, Role> joinCustomerRoleCount = countRoot.join(Customer_.roles, JoinType.LEFT);
+        
+		
 		if (customerQuery != null) {
-			Predicate where = getWhereClause(customerRoot, cb, customerQuery);
-			Predicate whereCount = getWhereClause(countRoot, cb, customerQuery);
+			Predicate where = getWhereClause(customerRoot, cb, customerQuery, joinCustomerRoleCount);
+			Predicate whereCount = getWhereClause(countRoot, cb, customerQuery, joinCustomerRoleCount);
 			addWhereClause(cq, where);
-			addWhereClause(cq, whereCount);
+			addWhereClause(cqCount, whereCount);
 		}
+		
+		cqCount.select(cb.count(countRoot));
+		
+		customerQuery.addSortItem(Customer_.enabled.getName(), SortOrder.DESCENDING, Customer.class, 1);
+		
 		
 		Map<Class<?>, From<?, ?>>  sortMap = new HashMap<Class<?>, From<?,?>>();
 		sortMap.put(Customer.class, customerRoot);
@@ -60,10 +74,11 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 		return resultList;
 	}
 	
-	private Predicate getWhereClause(Root<Customer> root, CriteriaBuilder cb, CustomerQuery customerQuery) {
+	private Predicate getWhereClause(Root<Customer> root, CriteriaBuilder cb, CustomerQuery customerQuery, Join<Customer, Role> joinCustomerRole) {
 		Predicate where = null;
 		where = addAndLikeExpression(customerQuery.getCustomerName(), Customer_.customerName, where, cb, root);
 		where = addAndEqualsExpression(customerQuery.getEnabled(), Customer_.enabled, where, cb, root);
+//		In<Role> roles = cb.in(joinCustomerRole.get())
 		return where;
 	}
 

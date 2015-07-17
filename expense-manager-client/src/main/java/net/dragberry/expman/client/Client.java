@@ -10,8 +10,10 @@ import javax.naming.NamingException;
 
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.domain.Customer;
+import net.dragberry.expman.domain.Customer_;
 import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
+import net.dragberry.expman.query.sort.SortOrder;
 import net.dragberry.expman.result.ResultList;
 
 public class Client {
@@ -47,8 +49,9 @@ public class Client {
 		CustomerQuery query = new CustomerQuery();
 		query.setCustomerName("ad");
 		query.setEnabled(true);
-		query.setPageNumber(1);
+		query.setPageNumber(2);
 		query.setPageSize(2);
+		query.addSortItem("enabled", SortOrder.DESCENDING, Customer.class, 1);
 		
 		ResultList<Customer> list = cs.fetchCustomerList(query);
 		

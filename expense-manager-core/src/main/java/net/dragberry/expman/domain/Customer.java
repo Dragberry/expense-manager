@@ -74,4 +74,8 @@ public class Customer implements Serializable {
 		this.enabled = enabled;
 	}
 	
+	@Override
+	public String toString() {
+		return "[customerKey=" + customerKey + ", customername=" + customerName + "]";
+	}
 }

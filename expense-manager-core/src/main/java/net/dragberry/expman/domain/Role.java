@@ -1,15 +1,11 @@
 package net.dragberry.expman.domain;
 
 import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -25,9 +21,6 @@ public class Role implements Serializable {
 	
 	@Column(name = "role_name")
 	private String roleName;
-	
-	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<Customer> customers;
 	
 	public Role() {
 	}
@@ -48,12 +41,9 @@ public class Role implements Serializable {
 		this.roleName = roleName;
 	}
 
-	public Set<Customer> getCustomers() {
-		return customers;
-	}
-
-	public void setCustomers(Set<Customer> customers) {
-		this.customers = customers;
+	@Override
+	public String toString() {
+		return "[roleKey=" + roleKey + ", roleName=" + roleName + "]";
 	}
 	
 }

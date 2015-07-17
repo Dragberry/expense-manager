@@ -1,8 +1,12 @@
 package net.dragberry.expman.query;
 
-public class PageableQuery {
+import java.io.Serializable;
+
+public class PageableQuery implements Serializable {
     
-    private int pageSize = -1;
+	private static final long serialVersionUID = 5744838670176681632L;
+
+	private int pageSize = -1;
     
     private int pageNumber = -1;
 

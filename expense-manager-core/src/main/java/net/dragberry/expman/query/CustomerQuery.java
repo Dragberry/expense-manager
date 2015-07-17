@@ -1,14 +1,18 @@
 package net.dragberry.expman.query;
 
-import java.io.Serializable;
+import java.util.Set;
 
-public class CustomerQuery extends SortableQuery implements Serializable {
+import net.dragberry.expman.domain.Role;
+
+public class CustomerQuery extends SortableQuery {
 
 	private static final long serialVersionUID = 7849789100403222003L;
 	
 	private String customerName;
 	
 	private Boolean enabled;
+	
+	private Set<Role> roles;
 	
 	public CustomerQuery() {
 	}
@@ -27,6 +31,14 @@ public class CustomerQuery extends SortableQuery implements Serializable {
 
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 }

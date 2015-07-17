@@ -8,6 +8,8 @@ import net.dragberry.expman.query.sort.SortOrder;
 
 public class SortableQuery extends PageableQuery {
 	
+	private static final long serialVersionUID = 912540237403603297L;
+	
 	private Set<SortItem> sortList = new TreeSet<SortItem>();
 	
 	public void addSortItem(String field, SortOrder sortOrder, Class<?> type, Integer order) {
