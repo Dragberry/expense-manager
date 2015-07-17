@@ -2,7 +2,7 @@ package net.dragberry.expman.query;
 
 import java.io.Serializable;
 
-public class CustomerQuery implements Serializable {
+public class CustomerQuery extends SortableQuery implements Serializable {
 
 	private static final long serialVersionUID = 7849789100403222003L;
 	

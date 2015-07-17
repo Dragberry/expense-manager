@@ -12,7 +12,7 @@ public class ResultList<T extends Serializable> implements Serializable {
 	
 	private List<T> list = new ArrayList<>();
 	
-	private int page = 0;
+	private int pageNumber = 0;
 	
 	private int pageSize = Integer.MAX_VALUE;
 	
@@ -30,12 +30,12 @@ public class ResultList<T extends Serializable> implements Serializable {
 		this.list = list;
 	}
 
-	public int getPage() {
-		return page;
+	public int getPageNumber() {
+		return pageNumber;
 	}
 
-	public void setPage(int page) {
-		this.page = page;
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
 	}
 
 	public int getPageSize() {

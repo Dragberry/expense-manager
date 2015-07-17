@@ -2,7 +2,6 @@ package net.dragberry.expman.client;
 
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Set;
 
 import javax.naming.Context;
@@ -48,6 +47,8 @@ public class Client {
 		CustomerQuery query = new CustomerQuery();
 		query.setCustomerName("ad");
 		query.setEnabled(true);
+		query.setPageNumber(1);
+		query.setPageSize(2);
 		
 		ResultList<Customer> list = cs.fetchCustomerList(query);
 		
