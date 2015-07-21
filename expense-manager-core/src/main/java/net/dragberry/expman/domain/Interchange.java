@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,11 +32,13 @@ public class Interchange implements Serializable {
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
-	@Column(name = "TYPE")
-	private String type;
+	@ManyToOne
+	@JoinColumn(referencedColumnName = "CUSTOMER_KEY")
+	private Customer customer;
 	
-	@Column(name = "CUSTOMER_KEY")
-	private Long customerKey;
+	@ManyToOne
+	@JoinColumn(referencedColumnName = "INTERCHANGE_TYPE")
+	private InterchangeType interchangeType;
 
 	public BigInteger getAmount() {
 		return amount;
@@ -60,20 +64,28 @@ public class Interchange implements Serializable {
 		this.description = description;
 	}
 
-	public String getType() {
-		return type;
+	public Long getInterchangeKey() {
+		return interchangeKey;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setInterchangeKey(Long interchangeKey) {
+		this.interchangeKey = interchangeKey;
 	}
 
-	public Long getCustomerKey() {
-		return customerKey;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setCustomerKey(Long customerKey) {
-		this.customerKey = customerKey;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
-	
+
+	public InterchangeType getInterchangeType() {
+		return interchangeType;
+	}
+
+	public void setInterchangeType(InterchangeType interchangeType) {
+		this.interchangeType = interchangeType;
+	}
+
 }
