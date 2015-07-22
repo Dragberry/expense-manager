@@ -43,6 +43,10 @@ public class Interchange implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "INTERCHANGE_TYPE_KEY", referencedColumnName = "INTERCHANGE_TYPE_KEY")
 	private InterchangeType interchangeType;
+	
+	@ManyToOne
+	@JoinColumn(name = "COUNTER_PARTY_KEY", referencedColumnName = "COUNTER_PARTY_KEY")
+	private CounterParty counterParty;
 
 	public BigDecimal getAmount() {
 		return amount;
@@ -98,6 +102,14 @@ public class Interchange implements Serializable {
 
 	public void setProcessingDate(Date processingDate) {
 		this.processingDate = processingDate;
+	}
+
+	public CounterParty getCounterParty() {
+		return counterParty;
+	}
+
+	public void setCounterParty(CounterParty counterParty) {
+		this.counterParty = counterParty;
 	}
 
 }

@@ -10,8 +10,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import net.dragberry.expman.business.CounterPartyService;
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.business.InterchangeService;
+import net.dragberry.expman.domain.CounterParty;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
@@ -39,22 +41,29 @@ public class Client {
 
 		CustomerService cs = (CustomerService) context.lookup("ejb:expense-manager-ear/expense-manager-business//CustomerServiceBean!net.dragberry.expman.business.CustomerService");
 		InterchangeService is =  (InterchangeService) context.lookup("ejb:expense-manager-ear/expense-manager-business//InterchangeServiceBean!net.dragberry.expman.business.InterchangeService");
+		CounterPartyService cps = (CounterPartyService) context.lookup("ejb:expense-manager-ear/expense-manager-business//CounterPartyServiceBean!net.dragberry.expman.business.CounterPartyService");
 		
 		Customer customer = cs.findCustomerById(1L);
 		
+		CounterParty cp = new CounterParty();
+		cp.setCustomer(customer);
+		cp.setName("Мама");
+		cp = cps.createCounterParty(cp);
+		
 		InterchangeType type = new InterchangeType();
-		type.setName("Fuel");
+		type.setName("DebtPayment");
 		type.setType("C");
 		type.setCustomer(customer);
 		
 		type = is.createInterchangeType(type);
 		
 		Interchange i = new Interchange();
-		i.setAmount(new BigDecimal("500000"));
+		i.setAmount(new BigDecimal("300000"));
 		i.setCurrency("BYR");
 		i.setCustomer(customer);
 		i.setDescription("Заправка на АЗС на логойском тракте");
 		i.setInterchangeType(type);
+		i.setCounterParty(cp);
 		i.setProcessingDate(new Date());
 		
 		i = is.createInterchange(i);
