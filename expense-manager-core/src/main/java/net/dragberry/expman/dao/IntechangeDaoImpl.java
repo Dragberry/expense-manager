@@ -56,7 +56,7 @@ public class IntechangeDaoImpl extends AbstractDao implements InterchangeDao {
 	 * 
 	 * @param root
 	 * @param cb
-	 * @param interchangeListQuery
+	 * @param interchangeTypeListQuery
 	 * @return
 	 */
 	private Predicate getWhereClauseForInterchangeType(Root<InterchangeType> root, CriteriaBuilder cb, InterchangeTypeListQuery interchangeTypeListQuery) {

@@ -16,6 +16,7 @@ import net.dragberry.expman.domain.CounterParty;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
+import net.dragberry.expman.query.CounterPartyListQuery;
 import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.query.sort.SortOrder;
@@ -48,6 +49,10 @@ public class Client {
 		cp.setCustomer(customer);
 		cp.setName("Мама");
 		cp = cps.createCounterParty(cp);
+		
+		CounterPartyListQuery counterPartyListQuery = new CounterPartyListQuery();
+		counterPartyListQuery.setName("Мама");
+		ResultList<CounterParty> cpl = cps.fetchCounterPartyList(counterPartyListQuery);
 		
 		InterchangeType type = new InterchangeType();
 		type.setName("DebtPayment");
