@@ -1,4 +1,4 @@
-package net.dragberry.expman.dao;
+package net.dragberry.expman.domain;
 
 public enum TransactionType {
 
