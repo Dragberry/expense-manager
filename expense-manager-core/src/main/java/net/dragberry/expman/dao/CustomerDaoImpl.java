@@ -1,10 +1,8 @@
 package net.dragberry.expman.dao;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
@@ -54,19 +52,7 @@ public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 		sortMap.put(Customer.class, customerRoot);
 		cq.orderBy(getOrders(customerQuery.getSortList(), sortMap, cb));
 		
-		TypedQuery<Customer> query = getEntityManager().createQuery(cq);
-        setPageableParams(customerQuery, query);
-		
-		
-		List<Customer> list = query.getResultList();
-        Long count = getEntityManager().createQuery(cqCount).getSingleResult();
-        
-		ResultList<Customer> resultList = new ResultList<Customer>();
-		resultList.setList(list);
-		resultList.setCount(count);
-        resultList.setPageNumber(customerQuery.getPageNumber());
-        resultList.setPageSize(customerQuery.getPageSize());
-		return resultList;
+        return executePageableListQuery(customerQuery, cqCount, cq);
 	}
 	
 	private Predicate getWhereClause(Root<Customer> root, CriteriaBuilder cb, CustomerQuery customerQuery, Join<Customer, Role> joinCustomerRole) {

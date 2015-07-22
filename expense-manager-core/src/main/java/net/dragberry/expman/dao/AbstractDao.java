@@ -1,5 +1,6 @@
 package net.dragberry.expman.dao;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import net.dragberry.expman.query.PageableQuery;
 import net.dragberry.expman.query.sort.SortItem;
+import net.dragberry.expman.result.ResultList;
 
 public class AbstractDao {
 	
@@ -254,4 +256,25 @@ public class AbstractDao {
 		return where;
 	}
 	
+	/**
+	 * Execute list query. Return {@link ResultList} with pageable params
+	 * 
+	 * @param pageableQuery
+	 * @param cqCount
+	 * @param query
+	 * @return
+	 */
+	protected <T extends Serializable> ResultList<T> executePageableListQuery(PageableQuery pageableQuery,
+			CriteriaQuery<Long> cqCount, CriteriaQuery<T> cq) {
+		TypedQuery<T> query = getEntityManager().createQuery(cq);
+        setPageableParams(pageableQuery, query);
+		List<T> list = query.getResultList();
+        Long count = getEntityManager().createQuery(cqCount).getSingleResult();
+        ResultList<T> resultList = new ResultList<T>();
+		resultList.setList(list);
+		resultList.setCount(count);
+        resultList.setPageNumber(pageableQuery.getPageNumber());
+        resultList.setPageSize(pageableQuery.getPageSize());
+		return resultList;
+	}
 }

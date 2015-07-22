@@ -25,6 +25,7 @@ public class InterchangeType implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 	
+	
 	@Column(name = "TYPE")
 	private String type;
 	

@@ -3,10 +3,7 @@ package net.dragberry.expman.client;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Set;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,13 +11,13 @@ import javax.naming.NamingException;
 import net.dragberry.expman.business.CounterPartyService;
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.business.InterchangeService;
+import net.dragberry.expman.dao.TransactionType;
 import net.dragberry.expman.domain.CounterParty;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
-import net.dragberry.expman.domain.Role;
-import net.dragberry.expman.query.CustomerQuery;
 import net.dragberry.expman.query.InterchangeListQuery;
+import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.query.sort.SortOrder;
 import net.dragberry.expman.result.ResultList;
 
@@ -54,7 +51,7 @@ public class Client {
 		
 		InterchangeType type = new InterchangeType();
 		type.setName("DebtPayment");
-		type.setType("C");
+		type.setType(TransactionType.CREDIT.getType());
 		type.setCustomer(customer);
 		
 		type = is.createInterchangeType(type);
@@ -79,6 +76,11 @@ public class Client {
 		interchangeListQuery.addSortItem("processingDate", SortOrder.ASCENDING, Interchange.class, 0);
 		
 		ResultList<Interchange> interchangeList = is.fetchInterchangeList(interchangeListQuery);
+		
+		InterchangeTypeListQuery interchangeTypeListQuery = new InterchangeTypeListQuery();
+		interchangeTypeListQuery.setName("Debt");
+		
+		ResultList<InterchangeType> interchangeTypeList = is.fetchInterchangeTypeList(interchangeTypeListQuery);
 		
 		System.out.println();
 	}

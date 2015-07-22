@@ -7,6 +7,7 @@ import net.dragberry.expman.dao.InterchangeDao;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.query.InterchangeListQuery;
+import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.result.ResultList;
 
 @Stateless
@@ -28,6 +29,11 @@ public class InterchangeServiceBean implements InterchangeService {
 	@Override
 	public ResultList<Interchange> fetchInterchangeList(InterchangeListQuery interchangeListQuery) {
 		return interchangeDao.fetchInterchangeList(interchangeListQuery);
+	}
+
+	@Override
+	public ResultList<InterchangeType> fetchInterchangeTypeList(InterchangeTypeListQuery interchangeTypeListQuery) {
+		return interchangeDao.fetchInterchangeTypeList(interchangeTypeListQuery);
 	}
 
 }
