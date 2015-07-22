@@ -1,6 +1,7 @@
 package net.dragberry.expman.client;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -73,6 +74,10 @@ public class Client {
 		interchangeListQuery.setFromAmount(new BigDecimal("100"));
 		interchangeListQuery.setToAmount(new BigDecimal("1000000"));
 		interchangeListQuery.setToDate(new Date());
+		interchangeListQuery.setCurrencyList(Arrays.asList(new String[] { "BYR" }));
+		interchangeListQuery.setCounterParty(Arrays.asList(new CounterParty[] { cp }));
+		interchangeListQuery.addSortItem("processingDate", SortOrder.ASCENDING, Interchange.class, 0);
+		
 		ResultList<Interchange> interchangeList = is.fetchInterchangeList(interchangeListQuery);
 		
 		System.out.println();

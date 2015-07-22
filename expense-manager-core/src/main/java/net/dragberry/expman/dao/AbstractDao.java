@@ -2,6 +2,7 @@ package net.dragberry.expman.dao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,10 @@ import javax.persistence.criteria.From;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import net.dragberry.expman.query.PageableQuery;
@@ -209,6 +212,45 @@ public class AbstractDao {
 				where = cb.lessThanOrEqualTo(root.get(attribute), max);
 			}
 		}
+		return where;
+	}
+	
+	/**
+	 * Add predicate2 to predicate1 with 'AND' operator. Null-safe operation.
+	 * 
+	 * @param predicate1
+	 * @param predicate2
+	 * @param cb
+	 * @return
+	 */
+	public static <T> Predicate addAndLikeExpression(Predicate predicate1, Predicate predicate2, CriteriaBuilder cb) {
+		if (predicate1 != null) {
+			predicate1 = cb.and(predicate1, predicate2);
+	    } else {
+	    	predicate1 = predicate2;
+	    }
+		return predicate1;
+	}
+	
+	/**
+	 * Add 'IN' expression with 'AND' operator. Null-safe operation
+	 * 
+	 * @param root
+	 * @param cb
+	 * @param collection
+	 * @param attribute
+	 * @param where
+	 * @return
+	 */
+	protected <T, A> Predicate addAndInExpression(Root<T> root, CriteriaBuilder cb,
+			Collection<A> collection, SingularAttribute<T, A> attribute, Predicate where) {
+		if (CollectionUtils.isNotEmpty(collection)) {
+            In<A> objectList = cb.in(root.get(attribute));
+            for (A object : collection) {
+            	objectList.value(object);
+            }
+            where = addAndLikeExpression(where, objectList, cb);
+        }
 		return where;
 	}
 	
