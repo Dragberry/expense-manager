@@ -1,6 +1,8 @@
 package net.dragberry.expman.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 
 import org.apache.commons.lang3.StringUtils;
@@ -147,6 +150,66 @@ public class AbstractDao {
 	    	predicate1 = predicate2;
 	    }
 		return predicate1;
+	}
+	
+	/**
+	 * Add range expression with 'AND' logical operator to WHERE clause. Using
+	 * with BigDecimal values.
+	 * 
+	 * @param min
+	 * @param max
+	 * @param attribute
+	 * @param where
+	 * @param cb
+	 * @param root
+	 * @return
+	 */
+	public static <T> Predicate addRangeExpression(BigDecimal min, BigDecimal max, SingularAttribute<T, BigDecimal> attribute, Predicate where, CriteriaBuilder cb, Root<T> root) {
+		if (min != null) {
+			if (where != null) {
+				where = cb.and(where, cb.ge(root.get(attribute), min));
+			} else {
+				where = cb.ge(root.get(attribute), min);
+			}
+		}
+		if (max != null) {
+			if (where != null) {
+				where = cb.and(where, cb.le(root.get(attribute), max));
+			} else {
+				where = cb.le(root.get(attribute), max);
+			}
+		}
+		return where;
+	}
+	
+	/**
+	 * Add range expression with 'AND' logical operator to WHERE clause. Using
+	 * with Date values.
+	 * 
+	 * @param min
+	 * @param max
+	 * @param attribute
+	 * @param where
+	 * @param cb
+	 * @param root
+	 * @return
+	 */
+	public static <T> Predicate addRangeExpression(Date min, Date max, SingularAttribute<T, Date> attribute, Predicate where, CriteriaBuilder cb, Root<T> root) {
+		if (min != null) {
+			if (where != null) {
+				where = cb.and(where, cb.greaterThanOrEqualTo(root.get(attribute), min));
+			} else {
+				where = cb.greaterThanOrEqualTo(root.get(attribute), min);
+			}
+		}
+		if (max != null) {
+			if (where != null) {
+				where = cb.and(where, cb.lessThanOrEqualTo(root.get(attribute), max));
+			} else {
+				where = cb.lessThanOrEqualTo(root.get(attribute), max);
+			}
+		}
+		return where;
 	}
 	
 }

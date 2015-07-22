@@ -19,6 +19,7 @@ import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
+import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.sort.SortOrder;
 import net.dragberry.expman.result.ResultList;
 
@@ -67,6 +68,12 @@ public class Client {
 		i.setProcessingDate(new Date());
 		
 		i = is.createInterchange(i);
+		
+		InterchangeListQuery interchangeListQuery = new InterchangeListQuery();
+		interchangeListQuery.setFromAmount(new BigDecimal("100"));
+		interchangeListQuery.setToAmount(new BigDecimal("1000000"));
+		interchangeListQuery.setToDate(new Date());
+		ResultList<Interchange> interchangeList = is.fetchInterchangeList(interchangeListQuery);
 		
 		System.out.println();
 	}

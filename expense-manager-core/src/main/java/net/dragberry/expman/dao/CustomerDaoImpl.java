@@ -22,7 +22,6 @@ import net.dragberry.expman.domain.Role_;
 import net.dragberry.expman.query.CustomerQuery;
 import net.dragberry.expman.result.ResultList;
 
-@Stateless
 public class CustomerDaoImpl extends AbstractDao implements CustomerDao {
 
 	@Override
