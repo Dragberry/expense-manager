@@ -1,7 +1,8 @@
 package net.dragberry.expman.domain;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +25,10 @@ public class Interchange implements Serializable {
 	private Long interchangeKey;
 	
 	@Column(name = "AMOUNT")
-	private BigInteger amount;
+	private BigDecimal amount;
+	
+	@Column(name = "PROCESSING_DATE")
+	private Date processingDate;
 	
 	@Column(name = "CURRENCY")
 	private String currency;
@@ -33,18 +37,18 @@ public class Interchange implements Serializable {
 	private String description;
 	
 	@ManyToOne
-	@JoinColumn(referencedColumnName = "CUSTOMER_KEY")
+	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
 	
 	@ManyToOne
-	@JoinColumn(referencedColumnName = "INTERCHANGE_TYPE")
+	@JoinColumn(name = "INTERCHANGE_TYPE_KEY", referencedColumnName = "INTERCHANGE_TYPE_KEY")
 	private InterchangeType interchangeType;
 
-	public BigInteger getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigInteger amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -86,6 +90,14 @@ public class Interchange implements Serializable {
 
 	public void setInterchangeType(InterchangeType interchangeType) {
 		this.interchangeType = interchangeType;
+	}
+
+	public Date getProcessingDate() {
+		return processingDate;
+	}
+
+	public void setProcessingDate(Date processingDate) {
+		this.processingDate = processingDate;
 	}
 
 }

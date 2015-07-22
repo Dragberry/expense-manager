@@ -29,7 +29,7 @@ public class InterchangeType implements Serializable {
 	private String type;
 	
 	@ManyToOne
-	@JoinColumn(referencedColumnName = "CUSTOMER_KEY")
+	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
 
 	public Long getInterchangeTypeKey() {

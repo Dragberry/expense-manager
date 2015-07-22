@@ -1,5 +1,7 @@
 package net.dragberry.expman.client;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -9,7 +11,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import net.dragberry.expman.business.CustomerService;
+import net.dragberry.expman.business.InterchangeService;
 import net.dragberry.expman.domain.Customer;
+import net.dragberry.expman.domain.Interchange;
+import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.Role;
 import net.dragberry.expman.query.CustomerQuery;
 import net.dragberry.expman.query.sort.SortOrder;
@@ -33,29 +38,27 @@ public class Client {
 		final String viewClassName = CustomerService.class.getName();
 
 		CustomerService cs = (CustomerService) context.lookup("ejb:expense-manager-ear/expense-manager-business//CustomerServiceBean!net.dragberry.expman.business.CustomerService");
-
-		Customer customer = new Customer();
-		customer.setCustomerName("added");
-		customer.setEnabled(true);
+		InterchangeService is =  (InterchangeService) context.lookup("ejb:expense-manager-ear/expense-manager-business//InterchangeServiceBean!net.dragberry.expman.business.InterchangeService");
 		
-		Set<Role> roles = new HashSet<Role>();
-		Role role = cs.findRoleByName("admin");
+		Customer customer = cs.findCustomerById(1L);
 		
-		roles.add(role);
+		InterchangeType type = new InterchangeType();
+		type.setName("Fuel");
+		type.setType("C");
+		type.setCustomer(customer);
 		
-		customer = cs.createCustomer(customer);
+		type = is.createInterchangeType(type);
 		
-		CustomerQuery query = new CustomerQuery();
-		query.setRoles(roles);
-//		query.setCustomerName("ad");
-		query.setEnabled(true);
-		query.setPageNumber(-1);
-		query.setPageSize(-1);
-		query.addSortItem("enabled", SortOrder.DESCENDING, Customer.class, 1);
+		Interchange i = new Interchange();
+		i.setAmount(new BigDecimal("500000"));
+		i.setCurrency("BYR");
+		i.setCustomer(customer);
+		i.setDescription("Заправка на АЗС на логойском тракте");
+		i.setInterchangeType(type);
+		i.setProcessingDate(new Date());
 		
-		ResultList<Customer> list = cs.fetchCustomerList(query);
+		i = is.createInterchange(i);
 		
-		Customer cust = cs.findCustomerById(3l);
 		System.out.println();
 	}
 }
