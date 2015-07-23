@@ -1,6 +1,7 @@
 package net.dragberry.expman.business;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Remote;
@@ -26,4 +27,9 @@ public interface InterchangeService {
 	BigDecimal getRealTimeBalance(Long customerKey, String currency) throws BusinessException;
 
 	Map<Currency, BigDecimal> getAllRealTimeBalances(Long customerKey) throws BusinessException;
+
+	Map<InterchangeType, Map<Currency, BigDecimal>> calculateExpenses(Long customerKey, List<InterchangeType> typeList);
+
+	Map<InterchangeType, Map<Currency, BigDecimal>> calculateEarnings(Long customerKey, List<InterchangeType> typeList);
+
 }

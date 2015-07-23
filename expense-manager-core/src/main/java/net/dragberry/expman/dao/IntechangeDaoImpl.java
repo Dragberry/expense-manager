@@ -16,6 +16,7 @@ import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.InterchangeType_;
 import net.dragberry.expman.domain.Interchange_;
+import net.dragberry.expman.domain.TransactionType;
 import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.result.ResultList;
@@ -122,6 +123,20 @@ public class IntechangeDaoImpl extends AbstractDao implements InterchangeDao {
 					+ " WHERE I.CUSTOMER_KEY = :customerKey AND I.CURRENCY = :currency");
 		query.setParameter(Customer_.customerKey.getName(), customerKey);
 		query.setParameter(Interchange_.currency.getName(), currency);
+		return (BigDecimal) query.getSingleResult();
+	}
+	
+	@Override
+	public BigDecimal calculateExpense(TransactionType type, Long customerKey, String currency, Long interchangeTypeKey) {
+		Query query = getEntityManager().createNativeQuery(
+				"SELECT SUM(I.AMOUNT) AS BALANCE"
+					+ " FROM INTERCHANGE I" 
+					+ " JOIN INTERCHANGE_TYPE IT ON I.INTERCHANGE_TYPE_KEY = IT.INTERCHANGE_TYPE_KEY" 
+					+ " WHERE I.CUSTOMER_KEY = :customerKey AND I.CURRENCY = :currency AND IT.TYPE = :type AND IT.INTERCHANGE_TYPE_KEY = :interchangeTypeKey");
+		query.setParameter(Customer_.customerKey.getName(), customerKey);
+		query.setParameter(Interchange_.currency.getName(), currency);
+		query.setParameter(InterchangeType_.interchangeTypeKey.getName(), interchangeTypeKey);
+		query.setParameter(InterchangeType_.type.getName(), type.getType());
 		return (BigDecimal) query.getSingleResult();
 	}
 

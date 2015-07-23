@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
+import net.dragberry.expman.domain.TransactionType;
 import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.result.ResultList;
@@ -37,4 +38,14 @@ public interface InterchangeDao {
 	 * @return
 	 */
 	BigDecimal getRealTimeBalance(Long customerKey, String currency);
+
+	/**
+	 * Calculate sum of expense of selected interchange type, customer and currency
+	 * 
+	 * @param customerKey
+	 * @param currency
+	 * @param interchangeTypeKey
+	 * @return
+	 */
+	BigDecimal calculateExpense(TransactionType type, Long customerKey, String currency, Long interchangeTypeKey);
 }

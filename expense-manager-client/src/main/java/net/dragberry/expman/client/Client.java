@@ -49,6 +49,14 @@ public class Client {
 		
 		Customer customer = cs.findCustomerById(1L);
 		
+		InterchangeTypeListQuery interchangeTypeListQuery = new InterchangeTypeListQuery();
+		interchangeTypeListQuery.setCustomer(customer);
+		ResultList<InterchangeType> interchangeTypeList = is.fetchInterchangeTypeList(interchangeTypeListQuery);
+		
+		
+		Map<InterchangeType, Map<Currency, BigDecimal>> expenseMap = is.calculateExpenses(customer.getCustomerKey(), interchangeTypeList.getList());
+		
+		
 		Map<Currency, BigDecimal> balances = is.getAllRealTimeBalances(customer.getCustomerKey());
 		
 		BigDecimal balance = is.getRealTimeBalance(customer.getCustomerKey(), "BYR");
@@ -89,11 +97,6 @@ public class Client {
 		interchangeListQuery.addSortItem("processingDate", SortOrder.ASCENDING, Interchange.class, 0);
 		
 		ResultList<Interchange> interchangeList = is.fetchInterchangeList(interchangeListQuery);
-		
-		InterchangeTypeListQuery interchangeTypeListQuery = new InterchangeTypeListQuery();
-		interchangeTypeListQuery.setName("Debt");
-		
-		ResultList<InterchangeType> interchangeTypeList = is.fetchInterchangeTypeList(interchangeTypeListQuery);
 		
 		System.out.println();
 	}

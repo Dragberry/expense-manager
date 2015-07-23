@@ -2,6 +2,8 @@ package net.dragberry.expman.business;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
@@ -12,6 +14,7 @@ import net.dragberry.expman.dao.InterchangeDao;
 import net.dragberry.expman.domain.Currency;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
+import net.dragberry.expman.domain.TransactionType;
 import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.InterchangeTypeListQuery;
 import net.dragberry.expman.result.ResultList;
@@ -66,6 +69,31 @@ public class InterchangeServiceBean implements InterchangeService {
 			}
 		}
 		return balanceMap;
+	}
+	
+	@Override
+	public Map<InterchangeType, Map<Currency, BigDecimal>> calculateExpenses(Long customerKey, List<InterchangeType> typeList) {
+		return calculateEarningsOrExpenses(TransactionType.DEBIT, customerKey, typeList);
+	}
+	
+	@Override
+	public Map<InterchangeType, Map<Currency, BigDecimal>> calculateEarnings(Long customerKey, List<InterchangeType> typeList) {
+		return calculateEarningsOrExpenses(TransactionType.CREDIT, customerKey, typeList);
+	}
+	
+	private Map<InterchangeType, Map<Currency, BigDecimal>> calculateEarningsOrExpenses(TransactionType transactionType, Long customerKey, List<InterchangeType> typeList) {
+		Map<InterchangeType, Map<Currency, BigDecimal>> result = new LinkedHashMap<InterchangeType, Map<Currency, BigDecimal>>();
+		for (InterchangeType type : typeList) {
+			Map<Currency, BigDecimal> expenseMap = new HashMap<Currency, BigDecimal>();
+			for (Currency currency : CurrencyUtils.getCurrencyList()) {
+				BigDecimal balance = interchangeDao.calculateExpense(transactionType, customerKey, currency.getCurrencyCode(), type.getInterchangeTypeKey());
+				if (balance != null) {
+					expenseMap.put(currency, balance);
+				}
+			}
+			result.put(type, expenseMap);
+		}
+		return result;
 	}
 
 }

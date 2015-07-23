@@ -65,4 +65,8 @@ public class InterchangeType implements Serializable {
 		this.customer = customer;
 	}
 	
+	@Override
+	public String toString() {
+		return "[InterchangeType(" + type + "): " + name + "; customer: "+ customer.getCustomerKey() + "]";
+	}
 }
