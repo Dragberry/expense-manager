@@ -36,5 +36,5 @@ public interface InterchangeDao {
 	 * @param customerKey
 	 * @return
 	 */
-	BigDecimal getRealTimeBalance(Long customerKey);
+	BigDecimal getRealTimeBalance(Long customerKey, String currency);
 }

@@ -114,13 +114,14 @@ public class IntechangeDaoImpl extends AbstractDao implements InterchangeDao {
 	}
 
 	@Override
-	public BigDecimal getRealTimeBalance(Long customerKey) {
+	public BigDecimal getRealTimeBalance(Long customerKey, String currency) {
 		Query query = getEntityManager().createNativeQuery(
 				"SELECT SUM(CASE WHEN IT.TYPE = 'C' THEN -I.AMOUNT ELSE I.AMOUNT END) AS BALANCE"
 					+ " FROM INTERCHANGE I" 
 					+ " JOIN INTERCHANGE_TYPE IT ON I.INTERCHANGE_TYPE_KEY = IT.INTERCHANGE_TYPE_KEY" 
-					+ " WHERE I.CUSTOMER_KEY = :customerKey");
+					+ " WHERE I.CUSTOMER_KEY = :customerKey AND I.CURRENCY = :currency");
 		query.setParameter(Customer_.customerKey.getName(), customerKey);
+		query.setParameter(Interchange_.currency.getName(), currency);
 		return (BigDecimal) query.getSingleResult();
 	}
 

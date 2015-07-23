@@ -39,11 +39,14 @@ public class InterchangeServiceBean implements InterchangeService {
 	}
 
 	@Override
-	public BigDecimal getRealTimeBalance(Long customerKey) throws BusinessException {
+	public BigDecimal getRealTimeBalance(Long customerKey, String currency) throws BusinessException {
 		if (customerKey == null) {
 			throw new BusinessException("The customer is not define!");
 		}
-		return interchangeDao.getRealTimeBalance(customerKey);
+		if (currency == null) {
+			throw new BusinessException("The currency is not define!");
+		}
+		return interchangeDao.getRealTimeBalance(customerKey, currency);
 	}
 
 }

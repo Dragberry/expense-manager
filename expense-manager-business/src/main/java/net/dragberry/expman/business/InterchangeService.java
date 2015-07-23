@@ -21,5 +21,5 @@ public interface InterchangeService {
 
 	ResultList<InterchangeType> fetchInterchangeTypeList(InterchangeTypeListQuery interchangeTypeListQuery);
 
-	BigDecimal getRealTimeBalance(Long customerKey) throws BusinessException;
+	BigDecimal getRealTimeBalance(Long customerKey, String currency) throws BusinessException;
 }

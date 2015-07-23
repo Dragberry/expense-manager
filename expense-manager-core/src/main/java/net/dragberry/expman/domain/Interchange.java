@@ -14,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.proxy.HibernateProxy;
-
 @Entity
 @Table(name = "INTERCHANGE")
 public class Interchange implements Serializable {
@@ -76,11 +74,7 @@ public class Interchange implements Serializable {
 	}
 
 	public Long getInterchangeKey() {
-		if (this instanceof HibernateProxy) {
-			return (long) ((HibernateProxy) this).getHibernateLazyInitializer().getIdentifier();
-		} else {
-			return interchangeKey;
-		}
+		return interchangeKey;
 	}
 
 	public void setInterchangeKey(Long interchangeKey) {

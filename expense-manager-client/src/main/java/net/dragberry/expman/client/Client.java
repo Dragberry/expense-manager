@@ -46,7 +46,7 @@ public class Client {
 		
 		Customer customer = cs.findCustomerById(1L);
 		
-		BigDecimal balance = is.getRealTimeBalance(customer.getCustomerKey());
+		BigDecimal balance = is.getRealTimeBalance(customer.getCustomerKey(), "BYR");
 		
 		CounterParty cp = new CounterParty();
 		cp.setCustomer(customer);
