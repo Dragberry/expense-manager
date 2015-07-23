@@ -8,6 +8,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import net.dragberry.expman.business.BusinessException;
 import net.dragberry.expman.business.CounterPartyService;
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.business.InterchangeService;
@@ -30,7 +31,7 @@ public class Client {
 	}
 
 	@SuppressWarnings({"unchecked", "unused", "rawtypes"})
-	private static void invokeStatelessBean() throws NamingException {
+	private static void invokeStatelessBean() throws NamingException, BusinessException {
 		final Hashtable jndiProperties = new Hashtable();
 		jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		final Context context = new InitialContext(jndiProperties);
@@ -44,6 +45,8 @@ public class Client {
 		CounterPartyService cps = (CounterPartyService) context.lookup("ejb:expense-manager-ear/expense-manager-business//CounterPartyServiceBean!net.dragberry.expman.business.CounterPartyService");
 		
 		Customer customer = cs.findCustomerById(1L);
+		
+		BigDecimal balance = is.getRealTimeBalance(customer.getCustomerKey());
 		
 		CounterParty cp = new CounterParty();
 		cp.setCustomer(customer);

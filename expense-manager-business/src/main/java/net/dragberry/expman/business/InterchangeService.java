@@ -1,5 +1,7 @@
 package net.dragberry.expman.business;
 
+import java.math.BigDecimal;
+
 import javax.ejb.Remote;
 
 import net.dragberry.expman.domain.Interchange;
@@ -19,4 +21,5 @@ public interface InterchangeService {
 
 	ResultList<InterchangeType> fetchInterchangeTypeList(InterchangeTypeListQuery interchangeTypeListQuery);
 
+	BigDecimal getRealTimeBalance(Long customerKey) throws BusinessException;
 }

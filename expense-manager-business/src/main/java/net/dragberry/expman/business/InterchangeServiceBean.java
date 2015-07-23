@@ -1,5 +1,7 @@
 package net.dragberry.expman.business;
 
+import java.math.BigDecimal;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -34,6 +36,14 @@ public class InterchangeServiceBean implements InterchangeService {
 	@Override
 	public ResultList<InterchangeType> fetchInterchangeTypeList(InterchangeTypeListQuery interchangeTypeListQuery) {
 		return interchangeDao.fetchInterchangeTypeList(interchangeTypeListQuery);
+	}
+
+	@Override
+	public BigDecimal getRealTimeBalance(Long customerKey) throws BusinessException {
+		if (customerKey == null) {
+			throw new BusinessException("The customer is not define!");
+		}
+		return interchangeDao.getRealTimeBalance(customerKey);
 	}
 
 }

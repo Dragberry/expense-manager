@@ -1,5 +1,7 @@
 package net.dragberry.expman.dao;
 
+import java.math.BigDecimal;
+
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.query.InterchangeListQuery;
@@ -28,4 +30,11 @@ public interface InterchangeDao {
 	 */
 	ResultList<InterchangeType> fetchInterchangeTypeList(InterchangeTypeListQuery interchangeTypeListQuery);
 
+	/**
+	 * Calculate current balance for customer
+	 * 
+	 * @param customerKey
+	 * @return
+	 */
+	BigDecimal getRealTimeBalance(Long customerKey);
 }

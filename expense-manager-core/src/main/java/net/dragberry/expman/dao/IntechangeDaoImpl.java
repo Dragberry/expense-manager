@@ -1,14 +1,17 @@
 package net.dragberry.expman.dao;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import net.dragberry.expman.domain.Customer_;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.InterchangeType_;
@@ -108,6 +111,17 @@ public class IntechangeDaoImpl extends AbstractDao implements InterchangeDao {
 		where = addAndInExpression(root, cb, interchangeListQuery.getCounterPartyList(), Interchange_.counterParty, where);
 		where = addAndInExpression(root, cb, interchangeListQuery.getInterchangeTypeList(), Interchange_.interchangeType, where);
 		return where;
+	}
+
+	@Override
+	public BigDecimal getRealTimeBalance(Long customerKey) {
+		Query query = getEntityManager().createNativeQuery(
+				"SELECT SUM(CASE WHEN IT.TYPE = 'C' THEN -I.AMOUNT ELSE I.AMOUNT END) AS BALANCE"
+					+ " FROM INTERCHANGE I" 
+					+ " JOIN INTERCHANGE_TYPE IT ON I.INTERCHANGE_TYPE_KEY = IT.INTERCHANGE_TYPE_KEY" 
+					+ " WHERE I.CUSTOMER_KEY = :customerKey");
+		query.setParameter(Customer_.customerKey.getName(), customerKey);
+		return (BigDecimal) query.getSingleResult();
 	}
 
 }
