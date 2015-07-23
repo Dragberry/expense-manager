@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -13,6 +15,7 @@ import net.dragberry.expman.business.CounterPartyService;
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.business.InterchangeService;
 import net.dragberry.expman.domain.CounterParty;
+import net.dragberry.expman.domain.Currency;
 import net.dragberry.expman.domain.Customer;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
@@ -45,6 +48,8 @@ public class Client {
 		CounterPartyService cps = (CounterPartyService) context.lookup("ejb:expense-manager-ear/expense-manager-business//CounterPartyServiceBean!net.dragberry.expman.business.CounterPartyService");
 		
 		Customer customer = cs.findCustomerById(1L);
+		
+		Map<Currency, BigDecimal> balances = is.getAllRealTimeBalances(customer.getCustomerKey());
 		
 		BigDecimal balance = is.getRealTimeBalance(customer.getCustomerKey(), "BYR");
 		
