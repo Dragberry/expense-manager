@@ -10,8 +10,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import net.dragberry.expman.business.utils.CurrencyUtils;
+import net.dragberry.expman.dao.ExpenseDao;
 import net.dragberry.expman.dao.InterchangeDao;
 import net.dragberry.expman.domain.Currency;
+import net.dragberry.expman.domain.Expense;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.TransactionType;
@@ -24,6 +26,9 @@ public class InterchangeServiceBean implements InterchangeService {
 	
 	@Inject
 	private InterchangeDao interchangeDao;
+	
+	@Inject
+	private ExpenseDao expenseDao;
 
 	@Override
 	public InterchangeType createInterchangeType(InterchangeType interchangeType) {
@@ -31,7 +36,11 @@ public class InterchangeServiceBean implements InterchangeService {
 	}
 
 	@Override
-	public Interchange createInterchange(Interchange interchange) {
+	public Interchange createInterchange(Interchange interchange) throws BusinessException {
+		Currency currency = CurrencyUtils.getCurrency(interchange.getCurrency());
+		if (currency == null) {
+			throw new BusinessException("The currency is not set for interchange!");
+		}
 		return interchangeDao.createInterchange(interchange);
 	}
 
@@ -94,6 +103,19 @@ public class InterchangeServiceBean implements InterchangeService {
 			result.put(type, expenseMap);
 		}
 		return result;
+	}
+
+	@Override
+	public Expense createExpense(Expense expense) throws BusinessException {
+		Interchange interchange = expense.getInterchange();
+		if (interchange == null) {
+			throw new BusinessException("The interchange is not set for expnse!");
+		}
+		BigDecimal amount = expense.getCost().multiply(new BigDecimal(expense.getQuantity()));
+		interchange.setAmount(amount);
+		interchange = interchangeDao.createInterchange(interchange);
+		expense.setInterchange(interchange);
+		return expenseDao.createExpense(expense);
 	}
 
 }

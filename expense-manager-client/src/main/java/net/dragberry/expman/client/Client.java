@@ -14,9 +14,11 @@ import net.dragberry.expman.business.BusinessException;
 import net.dragberry.expman.business.CounterPartyService;
 import net.dragberry.expman.business.CustomerService;
 import net.dragberry.expman.business.InterchangeService;
+import net.dragberry.expman.domain.CarExpense;
 import net.dragberry.expman.domain.CounterParty;
 import net.dragberry.expman.domain.Currency;
 import net.dragberry.expman.domain.Customer;
+import net.dragberry.expman.domain.Expense;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.TransactionType;
@@ -52,6 +54,19 @@ public class Client {
 		InterchangeTypeListQuery interchangeTypeListQuery = new InterchangeTypeListQuery();
 		interchangeTypeListQuery.setCustomer(customer);
 		ResultList<InterchangeType> interchangeTypeList = is.fetchInterchangeTypeList(interchangeTypeListQuery);
+		
+		Expense expense = new CarExpense();
+		expense.setCost(new BigDecimal("11100"));
+		expense.setQuantity(45);
+		expense.setCustomer(customer);
+		expense.setName("АИ-92");
+		Interchange intch = new Interchange();
+		intch.setProcessingDate(new Date());
+		intch.setCustomer(customer);
+		intch.setInterchangeType(interchangeTypeList.getList().get(0));
+		expense.setInterchange(intch);
+		expense = is.createExpense(expense);
+		
 		
 		
 		Map<InterchangeType, Map<Currency, BigDecimal>> expenseMap = is.calculateExpenses(customer.getCustomerKey(), interchangeTypeList.getList());
