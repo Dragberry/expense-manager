@@ -13,6 +13,7 @@ import net.dragberry.expman.business.utils.CurrencyUtils;
 import net.dragberry.expman.dao.ExpenseDao;
 import net.dragberry.expman.dao.InterchangeDao;
 import net.dragberry.expman.domain.CarExpense;
+import net.dragberry.expman.domain.CarExpense.Type;
 import net.dragberry.expman.domain.Currency;
 import net.dragberry.expman.domain.Expense;
 import net.dragberry.expman.domain.Interchange;
@@ -108,6 +109,21 @@ public class InterchangeServiceBean implements InterchangeService {
 
 	@Override
 	public Expense createExpense(Expense expense) throws BusinessException {
+		if (expense instanceof CarExpense) {
+			CarExpense ce = (CarExpense) expense;
+			if (ce.getType() == null) {
+				throw new BusinessException("The type of car expense is not specified!");
+			}
+			if (ce.getType() == Type.FUEL) {
+				if (ce.getQuantity() == null) {
+					throw new BusinessException("The quantity of a fuel is not define!");
+				}
+			} else {
+				ce.setQuantity(ce.getQuantity() == null ? 1 : ce.getQuantity());
+			}
+		}
+		
+		
 		if (expense instanceof CarExpense && ((CarExpense)expense).getType() == null) {
 			throw new BusinessException("The type of car expense is not specified!");
 		}
