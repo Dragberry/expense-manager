@@ -22,6 +22,7 @@ import net.dragberry.expman.domain.Expense;
 import net.dragberry.expman.domain.Interchange;
 import net.dragberry.expman.domain.InterchangeType;
 import net.dragberry.expman.domain.TransactionType;
+import net.dragberry.expman.domain.CarExpense.Type;
 import net.dragberry.expman.query.CounterPartyListQuery;
 import net.dragberry.expman.query.InterchangeListQuery;
 import net.dragberry.expman.query.InterchangeTypeListQuery;
@@ -55,7 +56,7 @@ public class Client {
 		interchangeTypeListQuery.setCustomer(customer);
 		ResultList<InterchangeType> interchangeTypeList = is.fetchInterchangeTypeList(interchangeTypeListQuery);
 		
-		Expense expense = new CarExpense();
+		CarExpense expense = new CarExpense();
 		expense.setCost(new BigDecimal("11100"));
 		expense.setQuantity(45);
 		expense.setCustomer(customer);
@@ -65,7 +66,8 @@ public class Client {
 		intch.setCustomer(customer);
 		intch.setInterchangeType(interchangeTypeList.getList().get(0));
 		expense.setInterchange(intch);
-		expense = is.createExpense(expense);
+		expense.setType(Type.REGULAR);
+		Expense expense1 = is.createExpense(expense);
 		
 		
 		

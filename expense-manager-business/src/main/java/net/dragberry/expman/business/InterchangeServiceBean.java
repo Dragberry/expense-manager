@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import net.dragberry.expman.business.utils.CurrencyUtils;
 import net.dragberry.expman.dao.ExpenseDao;
 import net.dragberry.expman.dao.InterchangeDao;
+import net.dragberry.expman.domain.CarExpense;
 import net.dragberry.expman.domain.Currency;
 import net.dragberry.expman.domain.Expense;
 import net.dragberry.expman.domain.Interchange;
@@ -107,9 +108,12 @@ public class InterchangeServiceBean implements InterchangeService {
 
 	@Override
 	public Expense createExpense(Expense expense) throws BusinessException {
+		if (expense instanceof CarExpense && ((CarExpense)expense).getType() == null) {
+			throw new BusinessException("The type of car expense is not specified!");
+		}
 		Interchange interchange = expense.getInterchange();
 		if (interchange == null) {
-			throw new BusinessException("The interchange is not set for expnse!");
+			throw new BusinessException("The interchange is not set for expense!");
 		}
 		BigDecimal amount = expense.getCost().multiply(new BigDecimal(expense.getQuantity()));
 		interchange.setAmount(amount);
