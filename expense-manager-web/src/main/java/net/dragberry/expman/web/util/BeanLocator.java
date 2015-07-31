@@ -19,7 +19,7 @@ public class BeanLocator {
 	
 	public static InterchangeService getInterchangeService() throws NamingException {
 		if (interchangeService == null) {
-			getContext().lookup(getBeanName("expense-manager-ear", "expense-manager-business", StringUtils.EMPTY, "InterchangeServiceBean", InterchangeService.class));
+			interchangeService = (InterchangeService) getContext().lookup(getBeanName("expense-manager-ear", "expense-manager-business", StringUtils.EMPTY, InterchangeServiceBean.class, InterchangeService.class));
 		}
 		return interchangeService;
 	}
@@ -34,7 +34,7 @@ public class BeanLocator {
 		return context;
 	}
 	
-	private static String getBeanName(String appName, String moduleName, String distinctName, String bean, Class<?> remote) {
+	private static String getBeanName(String appName, String moduleName, String distinctName, Class<?> bean, Class<?> remote) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ejb:");
 		sb.append(appName);
@@ -43,7 +43,7 @@ public class BeanLocator {
 		sb.append("/");
 		sb.append(distinctName);
 		sb.append("/");
-		sb.append(bean);
+		sb.append(bean.getSimpleName());
 		sb.append("!");
 		sb.append(remote.getName());
 		return sb.toString();
