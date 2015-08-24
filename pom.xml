@@ -25,8 +25,7 @@
 		<module>expense-manager-business</module>
 		<module>expense-manager-ear</module>
 		<module>expense-manager-client</module>
-		<module>expense-manager-web-ear</module>
-		<module>expense-manager-web</module>
+		<module>expense-manager-ws</module>
 	</modules>
 
 	<properties>

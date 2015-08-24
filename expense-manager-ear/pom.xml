@@ -36,6 +36,12 @@
 			<version>${project.version}</version>
 			<type>ejb</type>
 		</dependency>
+		<dependency>
+			<groupId>net.dragberry.expman</groupId>
+			<artifactId>expense-manager-ws</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -60,6 +66,11 @@
 							<bundleFileName>expense-manager-business.jar</bundleFileName>
 							<artifactId>expense-manager-business</artifactId>
 						</ejbModule>
+						<webModule>
+							<groupId>net.dragberry.expman</groupId>
+							<artifactId>expense-manager-ws</artifactId>
+							<contextRoot>/expman-ws</contextRoot>
+						</webModule>
 					</modules>
 					<fileNameMapping>no-version</fileNameMapping>
 				</configuration>
